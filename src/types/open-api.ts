@@ -1,4 +1,4 @@
-import { Omit } from './index';
+import type { Omit } from './index';
 
 export interface OpenAPISpec {
   openapi: string;
@@ -40,7 +40,10 @@ export interface OpenAPIPaths {
   [path: string]: OpenAPIPath;
 }
 export interface OpenAPIRef {
+  'x-refsStack'?: string[];
   $ref: string;
+  summary?: string;
+  description?: string;
 }
 
 export type Referenced<T> = OpenAPIRef | T;

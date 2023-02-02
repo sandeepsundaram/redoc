@@ -2,13 +2,14 @@ import { observer } from 'mobx-react';
 import * as React from 'react';
 
 import { ShelfIcon } from '../../common-elements/shelfs';
-import { IMenuItem, OperationModel } from '../../services';
+import { OperationModel } from '../../services';
 import { shortenHTTPVerb } from '../../utils/openapi';
 import { MenuItems } from './MenuItems';
 import { MenuItemLabel, MenuItemLi, MenuItemTitle, OperationBadge } from './styled.elements';
 import { l } from '../../services/Labels';
 import { scrollIntoViewIfNeeded } from '../../utils';
 import { OptionsContext } from '../OptionsProvider';
+import type { IMenuItem } from '../../services';
 
 export interface MenuItemProps {
   item: IMenuItem;
@@ -43,7 +44,7 @@ export class MenuItem extends React.Component<MenuItemProps> {
   render() {
     const { item, withoutChildren } = this.props;
     return (
-      <MenuItemLi onClick={this.activate} depth={item.depth} data-item-id={item.id}>
+      <MenuItemLi onClick={this.activate} depth={item.depth} data-item-id={item.id} role="menuitem">
         {item.type === 'operation' ? (
           <OperationMenuItemContent {...this.props} item={item as OperationModel} />
         ) : (
