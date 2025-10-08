@@ -4,26 +4,36 @@ import * as React from 'react';
 import { OptionsConsumer } from '../OptionsProvider';
 import { StylingMarkdownProps } from './Markdown';
 import { StyledMarkdownBlock } from './styled.elements';
+import styled from 'styled-components';
 
-const StyledMarkdownSpan = StyledMarkdownBlock.withComponent('span');
+// Workaround for DOMPurify type issues (https://github.com/cure53/DOMPurify/issues/1034)
+const dompurify = DOMPurify['default'] as DOMPurify.DOMPurify;
 
-const sanitize = (untrustedSpec, html) => (untrustedSpec ? DOMPurify.sanitize(html) : html);
+const StyledMarkdownSpan = styled(StyledMarkdownBlock)`
+  display: inline;
+`;
 
-export function SanitizedMarkdownHTML(
-  props: StylingMarkdownProps & { html: string; className?: string; 'data-role'?: string },
-) {
-  const Wrap = props.inline ? StyledMarkdownSpan : StyledMarkdownBlock;
+const sanitize = (sanitize, html) => (sanitize ? dompurify.sanitize(html) : html);
+
+export function SanitizedMarkdownHTML({
+  inline,
+  compact,
+  ...rest
+}: StylingMarkdownProps & { html: string; className?: string; 'data-role'?: string }) {
+  const Wrap = inline ? StyledMarkdownSpan : StyledMarkdownBlock;
 
   return (
     <OptionsConsumer>
       {options => (
         <Wrap
-          className={'redoc-markdown ' + (props.className || '')}
+          className={'redoc-markdown ' + (rest.className || '')}
           dangerouslySetInnerHTML={{
-            __html: sanitize(options.untrustedSpec, props.html),
+            __html: sanitize(options.sanitize, rest.html),
           }}
-          data-role={props['data-role']}
-          {...props}
+          data-role={rest['data-role']}
+          {...rest}
+          $inline={inline}
+          $compact={compact}
         />
       )}
     </OptionsConsumer>

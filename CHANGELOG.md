@@ -1,3 +1,148 @@
+# [2.5.1](https://github.com/Redocly/redoc/compare/v2.4.0...v2.5.1) (2025-09-26)
+
+
+### Bug Fixes
+
+* Bumped `mobx-react` dependency to address a security vulnerability.
+
+# [2.5.0](https://github.com/Redocly/redoc/compare/v2.4.0...v2.5.0) (2025-04-14)
+
+
+### Bug Fixes
+
+* enhance accessibility for menu items with keyboard support ([#2655](https://github.com/Redocly/redoc/issues/2655)) ([2db293b](https://github.com/Redocly/redoc/commit/2db293bfb2973497dd33f31dc99e97f5bb90bbe8))
+
+
+### Features
+
+* add keyboard navigation support to JsonViewer component ([#2654](https://github.com/Redocly/redoc/issues/2654)) ([1b4126f](https://github.com/Redocly/redoc/commit/1b4126fde4531387f49c90f52efbd0c0e5f7b6ea))
+
+
+
+# [2.4.0](https://github.com/Redocly/redoc/compare/v2.3.0...v2.4.0) (2025-02-07)
+
+
+### Bug Fixes
+
+* Prototype Pollution Vulnerability Affecting redoc <=2.2.0 ([#2638](https://github.com/Redocly/redoc/issues/2638)) ([153ec7a](https://github.com/Redocly/redoc/commit/153ec7a0b7245639f404c0b038b612ae7377c7db))
+* unify redoc config ([#2647](https://github.com/Redocly/redoc/issues/2647)) ([53a6afc](https://github.com/Redocly/redoc/commit/53a6afc59624fe4591b0a0f1f20f41c0fbb5f1cf))
+
+
+### Features
+
+* add supporting react 19 in package.json ([#2652](https://github.com/Redocly/redoc/issues/2652)) ([3a74802](https://github.com/Redocly/redoc/commit/3a748022be3a7dc7f98669e1645dd5cda72f1abc))
+
+
+
+# [2.3.0](https://github.com/Redocly/redoc/compare/v2.2.0...v2.3.0) (2025-01-16)
+
+
+### Bug Fixes
+
+* displaying json example when showObjectSchemaExamples enabled ([#2635](https://github.com/Redocly/redoc/issues/2635)) ([59ee73f](https://github.com/Redocly/redoc/commit/59ee73fefa8e8edb398940076bdd721fc284caa3))
+* displaying nested items with type string ([#2634](https://github.com/Redocly/redoc/issues/2634)) ([85b622f](https://github.com/Redocly/redoc/commit/85b622fc581eb96303aeb85056aef36c74ea9f9d))
+* passing inline parameters after support react 18 for response title ([#2640](https://github.com/Redocly/redoc/issues/2640)) ([d614d2d](https://github.com/Redocly/redoc/commit/d614d2d022df8bd1989cb0eaf76d087b52120d36))
+
+
+### Features
+
+* update pattern styling ([#2196](https://github.com/Redocly/redoc/issues/2196)) ([#2600](https://github.com/Redocly/redoc/issues/2600)) ([aa0879c](https://github.com/Redocly/redoc/commit/aa0879ca0235112918428fdff8f4c48d2c6c4adf))
+
+
+
+# [2.2.0](https://github.com/Redocly/redoc/compare/v2.1.5...v2.2.0) (2024-10-16)
+
+
+### Bug Fixes
+
+* show siblings schema with oneOf ([#2576](https://github.com/Redocly/redoc/issues/2576)) ([60d131b](https://github.com/Redocly/redoc/commit/60d131b0a9dab4710e900323c9ba81160cecf7d8))
+
+
+### Features
+
+* add support x-badges ([#2605](https://github.com/Redocly/redoc/issues/2605)) ([64f1877](https://github.com/Redocly/redoc/commit/64f18779e5fe7e03f25862463cbc5062e85c867c))
+
+
+
+## [2.1.5](https://github.com/Redocly/redoc/compare/v2.1.4...v2.1.5) (2024-06-10)
+
+
+### Bug Fixes
+
+* update react to 18 and react-tabs to 6 ([#2547](https://github.com/Redocly/redoc/issues/2547)) ([c664dd0](https://github.com/Redocly/redoc/commit/c664dd0d56571ce799b8eadd081d86a6b2cdefae))
+
+
+
+## [2.1.4](https://github.com/Redocly/redoc/compare/v2.1.3...v2.1.4) (2024-04-25)
+
+
+### Bug Fixes
+
+* add deprecated css to clickable property name ([#2526](https://github.com/Redocly/redoc/issues/2526)) ([b0d03d0](https://github.com/Redocly/redoc/commit/b0d03d02069c1508447ddebc2f8a3fffa9b03ce5))
+* use h2/h3 for headings instead of h1/h2 for better seo ([#2514](https://github.com/Redocly/redoc/issues/2514)) ([2b72dc0](https://github.com/Redocly/redoc/commit/2b72dc0e90f759a8ee2e47691c844e7f05928a24))
+* security vulnerability ([#2445](https://github.com/Redocly/redoc/pull/2445)) ([1f11f5](https://github.com/Redocly/redoc/commit/1f11f597c4f10ddd601db247f5034052b6ca689f))
+
+
+
+## [2.1.3](https://github.com/Redocly/redoc/compare/v2.1.2...v2.1.3) (2023-10-24)
+
+
+### Bug Fixes
+
+* default value as object in request body ([#2437](https://github.com/Redocly/redoc/issues/2437)) ([b36a6e2](https://github.com/Redocly/redoc/commit/b36a6e27bb3e03d39ee74c3e71f18a504539d91b))
+* display string pattern in array items ([#2438](https://github.com/Redocly/redoc/issues/2438)) ([8ddeb6d](https://github.com/Redocly/redoc/commit/8ddeb6dfda686ec8a6948eb2d96efb99bf422429))
+* hideRequestPayloadSample ([#2436](https://github.com/Redocly/redoc/issues/2436)) ([bf96061](https://github.com/Redocly/redoc/commit/bf960612a47bfe10ff205b9d78f3040515a5467d))
+* more cases for react18 and cli integration ([#2416](https://github.com/Redocly/redoc/issues/2416)) ([26674e7](https://github.com/Redocly/redoc/commit/26674e70c66b686d0f0baa569b186292c41e5726))
+
+
+
+## [2.1.2](https://github.com/Redocly/redoc/compare/v2.1.1...v2.1.2) (2023-09-11)
+
+
+### Bug Fixes
+
+* react18 cli integration ([#2404](https://github.com/Redocly/redoc/issues/2404)) ([76edc15](https://github.com/Redocly/redoc/commit/76edc159399150778b384be87ee958a93e5c491c))
+* style RefreshToken URL as <code> in the authorization section ([1d61001](https://github.com/Redocly/redoc/commit/1d6100111a0f3b609dadbd706354ce6125947df2))
+
+
+
+## [2.1.1](https://github.com/Redocly/redoc/compare/v2.1.0...v2.1.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* hotfix, crash after 2.1 release ([0ab3428](https://github.com/Redocly/redoc/commit/0ab3428664f857ea07381686a2b4beb4c22b17c3))
+
+
+
+# [2.1.0](https://github.com/Redocly/redoc/compare/v2.0.0...v2.1.0) (2023-08-10)
+
+
+### Bug Fixes
+
+* call onLoaded if specs are not found ([#2182](https://github.com/Redocly/redoc/issues/2182)) ([0753bbe](https://github.com/Redocly/redoc/commit/0753bbea4b1425bdb09225fca45effae8003dce8))
+* default value for array query parameter ([#2186](https://github.com/Redocly/redoc/issues/2186)) ([3d410b6](https://github.com/Redocly/redoc/commit/3d410b6002c656efa780254c9c45c6249f90bce1))
+* **demo:** Get CORS proxy to work in Chrome on Windows ([#2220](https://github.com/Redocly/redoc/issues/2220)) ([1597bae](https://github.com/Redocly/redoc/commit/1597bae4032b65a94211e80aad51867e5af1ceb3))
+* error with immutable object spec ([#2179](https://github.com/Redocly/redoc/issues/2179)) ([53c4f36](https://github.com/Redocly/redoc/commit/53c4f36fad3e4453a72c1d136e37929de47cd35e))
+* improve accessible label by using the property name ([#2224](https://github.com/Redocly/redoc/issues/2224)) ([12be1bc](https://github.com/Redocly/redoc/commit/12be1bc5ffa11f9092c2faacd69d787f4e899960))
+* move role to list item to meet ARIA spec ([#2228](https://github.com/Redocly/redoc/issues/2228)) ([b8f7da6](https://github.com/Redocly/redoc/commit/b8f7da6b003ca12c1e2f0f4d42f3dd6d6f86ccac))
+* remove GenericObject shim ([#2177](https://github.com/Redocly/redoc/issues/2177)) ([127ef26](https://github.com/Redocly/redoc/commit/127ef260b961e07c5f82a7494b51dd3f04294e87))
+* renames 'FieldContstraints' to 'FieldConstraints' ([#2352](https://github.com/Redocly/redoc/issues/2352)) ([7e05202](https://github.com/Redocly/redoc/commit/7e052028d965624feb72d5f4b74fdb3c2d5df21f))
+* schema oneOf title with const ([#2350](https://github.com/Redocly/redoc/issues/2350)) ([4386867](https://github.com/Redocly/redoc/commit/4386867d908eae2aed2b9fd86e9f5476aadce52b))
+* **types/open-api:** import type ([#2213](https://github.com/Redocly/redoc/issues/2213)) ([33be51a](https://github.com/Redocly/redoc/commit/33be51a7a4068f44fd914314002c058a204ba0c2))
+
+
+### Features
+
+* add deprecation label to redoc-cli ([#2172](https://github.com/Redocly/redoc/issues/2172)) ([2ae7e08](https://github.com/Redocly/redoc/commit/2ae7e08af49321cea9bf2078f309b48bacf76ad6))
+* add option to hide the example code when using the `SchemaDefinition` component ([#2157](https://github.com/Redocly/redoc/issues/2157)) ([168189b](https://github.com/Redocly/redoc/commit/168189b2fdcf3667422ce3940ace3eedd0bdf284))
+* add support of react 18 ([#2369](https://github.com/Redocly/redoc/issues/2369)) ([054f604](https://github.com/Redocly/redoc/commit/054f604195629197aa8bd0fc46e91383ca5a05af))
+* add x-tags ([#2355](https://github.com/Redocly/redoc/issues/2355)) ([0bb21c8](https://github.com/Redocly/redoc/commit/0bb21c812840999d2dd2d96da42124746440b035))
+* enable keyboard navigation ([#2361](https://github.com/Redocly/redoc/issues/2361)) ([d21af58](https://github.com/Redocly/redoc/commit/d21af5841455901f0572ab475b7dc661acb86a71))
+* indicate whether request body is required or optional ([#2175](https://github.com/Redocly/redoc/issues/2175)) ([d3ad792](https://github.com/Redocly/redoc/commit/d3ad7925cfbd90b59b502b5ef53228fcd34b8a1e))
+
+
+
 # [2.0.0](https://github.com/Redocly/redoc/compare/v2.0.0-rc.77...v2.0.0) (2022-09-12)
 
 
@@ -159,7 +304,7 @@
 
 * implement configurable minimum characer length to init search ([#1402](https://github.com/Redocly/redoc/issues/1402)) ([0fa08fa](https://github.com/Redocly/redoc/commit/0fa08faab1c176a4bfc5a553e8e8f8b07aca659f))
 * support OAS 3.1 unevaluatedProperties ([#1978](https://github.com/Redocly/redoc/issues/1978)) ([0755ac6](https://github.com/Redocly/redoc/commit/0755ac6f04514eb0c08f90afceeda7858206b435))
-* publish dockerhub ([#1971](https://github.com/Redocly/redoc/issues/1971)) ([7e01a0](https://github.com/Redocly/redoc/commit/7e01a0cfe2ad8d06075bfc66ef3860edbef033f8)) 
+* publish dockerhub ([#1971](https://github.com/Redocly/redoc/issues/1971)) ([7e01a0](https://github.com/Redocly/redoc/commit/7e01a0cfe2ad8d06075bfc66ef3860edbef033f8))
 
 
 # [2.0.0-rc.67](https://github.com/Redocly/redoc/compare/v2.0.0-rc.66...v2.0.0-rc.67) (2022-04-28)
@@ -498,7 +643,7 @@ closes: [#1506](https://github.com/Redocly/redoc/issues/1506), [#1478](https://g
 
 ### Bug Fixes
 
-* invalid discriminator dropdown behaviour with enum ([be07197](https://github.com/Redocly/redoc/commit/be07197e6d1e85a3fd3e61189a36b288751c077d))
+* invalid discriminator dropdown behavior with enum ([be07197](https://github.com/Redocly/redoc/commit/be07197e6d1e85a3fd3e61189a36b288751c077d))
 
 
 
@@ -716,7 +861,7 @@ Same as rc.31 by mistake
 
 ### Bug Fixes
 
-* empty servers behaviour per OAS spec ([ed1db0c](https://github.com/Redocly/redoc/commit/ed1db0c9027087ae0ae923e390e3e1d638a647ae)), closes [#1151](https://github.com/Redocly/redoc/issues/1151)
+* empty servers behavior per OAS spec ([ed1db0c](https://github.com/Redocly/redoc/commit/ed1db0c9027087ae0ae923e390e3e1d638a647ae)), closes [#1151](https://github.com/Redocly/redoc/issues/1151)
 * fix duplicated content in tags when using md headings ([a260c84](https://github.com/Redocly/redoc/commit/a260c8414c34a259a70a20ebcd20ecbb06c3d250)), closes [#1150](https://github.com/Redocly/redoc/issues/1150) [#1152](https://github.com/Redocly/redoc/issues/1152)
 * use mobile menu background color value from theme ([#1144](https://github.com/Redocly/redoc/issues/1144)) ([41a9b3c](https://github.com/Redocly/redoc/commit/41a9b3c18228d236d182d3c15c9abc35ae72a0d5))
 
@@ -1694,7 +1839,7 @@ Complete rewrite also means that this rewrite may introduce issues, but they sho
 - no more GitHub pages-based CDN. Use [unpkg.com](https://unpkg.com/) to access ReDoc releases
 
 
-### Known Regression (will be resolved before leaving alpha stage)
+### Known Regression (resolved before leaving alpha stage)
 - `lazyLoading` option not implemented yet
 - Copying to clipboard of samples not implemented yet
 - Search not implemented yet
