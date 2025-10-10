@@ -2,10 +2,6 @@
   "name": "studio-docs",
   "version": "1.0.0",
   "description": "Studio Docs",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/Redocly/studio-docs"
-  },
   "browserslist": [
     "defaults"
   ],
@@ -13,7 +9,7 @@
     "node": ">=6.9",
     "npm": ">=3.0.0"
   },
-  "author": "Roman Hotsiy <gotsijroman@gmail.com>",
+  "author": "Data Equity Ltd. <sandeep.sundaram@dataequity.io>",
   "license": "MIT",
   "keywords": [
     "OpenAPI",
@@ -25,14 +21,14 @@
     "documentation",
     "React.js"
   ],
-  "main": "bundles/redoc.lib.js",
-  "browser": "bundles/redoc.browser.lib.js",
+  "main": "bundles/studio-docs.lib.js",
+  "browser": "bundles/studio-docs.browser.lib.js",
   "types": "typings/index.d.ts",
   "scripts": {
     "start": "webpack serve --mode=development --env playground --hot --config demo/webpack.config.ts",
     "start:prod": "webpack serve --env playground --mode=production --config demo/webpack.config.ts",
     "start:benchmark": "webpack serve --mode=production --env.bench --config demo/webpack.config.ts",
-    "test": "npm run unit && npm run license-check",
+    "test": "npm run unit",
     "unit": "jest --coverage",
     "test:update-snapshot": "jest --updateSnapshot",
     "e2e": "cypress run",
@@ -54,11 +50,8 @@
     "start:demo": "webpack serve --hot --config demo/webpack.config.ts --mode=development",
     "build:demo": "webpack --mode=production --config demo/webpack.config.ts",
     "publish-cdn": "scripts/publish-cdn.sh",
-    "deploy:demo": "aws s3 sync demo/dist s3://production-redoc-demo --acl=public-read",
-    "license-check": "license-checker --production --onlyAllow 'MIT;ISC;Apache-2.0;BSD;BSD-2-Clause;BSD-3-Clause;CC-BY-4.0;CC0-1.0;Python-2.0 ' --summary",
-    "docker:build": "docker build -f config/docker/Dockerfile -t redoc .",
-    "prepare": "husky install",
-    "pre-commit": "pretty-quick --staged && npm run lint"
+    "deploy:demo": "aws s3 sync demo/dist s3://production-studio-docs-demo --acl=public-read",
+    "docker:build": "docker build -f config/docker/Dockerfile -t studio-docs ."
   },
   "devDependencies": {
     "@cfaester/enzyme-adapter-react-18": "^0.8.0",
@@ -164,15 +157,15 @@
   },
   "size-limit": [
     {
-      "path": "./bundles/redoc.standalone.js",
+      "path": "./bundles/studio-docs.standalone.js",
       "limit": "350 kB"
     },
     {
-      "path": "./bundles/redoc.lib.js",
+      "path": "./bundles/studio-docs.lib.js",
       "limit": "100 kB"
     },
     {
-      "path": "./bundles/redoc.browser.lib.js",
+      "path": "./bundles/studio-docs.browser.lib.js",
       "limit": "100 kB"
     }
   ],

@@ -11,7 +11,7 @@ export const Dropdown = styled(DropdownComponent)<{
     outline: none;
     display: inline-block;
     font-family: ${props => props.theme.typography.headings.fontFamily};
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: white; 
     vertical-align: bottom;
     width: ${({ fullWidth }) => (fullWidth ? '100%' : 'auto')};
     text-transform: none;
@@ -35,7 +35,7 @@ export const Dropdown = styled(DropdownComponent)<{
     appearance: none;
     cursor: pointer;
 
-    color: ${({ theme }) => theme.colors.text.primary};
+    color: white;
     line-height: inherit;
     font-family: inherit;
   }
