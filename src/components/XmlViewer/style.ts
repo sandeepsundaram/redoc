@@ -2,9 +2,22 @@ import { css } from '../../styled-components';
 import styled from '../../styled-components';
 
 export const jsonStyles = css`
-  .redoc-json code > .collapser {
+  pre > .collapser {
     display: none;
     pointer-events: none;
+  }
+
+  .editable-header,
+  .editable-code {
+    backgroundcolor: '#1f4662';
+    color: '#fff';
+    fontsize: '12px';
+    display: 'block';
+    padding: '10px 30px';
+    margin: '0';
+    overflow: 'scroll';
+    width: 100%;
+    height: 300px;
   }
 
   font-family: ${props => props.theme.typography.code.fontFamily};
@@ -110,7 +123,6 @@ export const jsonStyles = css`
     display: inherit;
   }
 `;
-
 export const ErrorDiv = styled.div`
   color: red;
 `;

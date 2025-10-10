@@ -5,8 +5,8 @@ import { MediaTypeModel, OpenAPIParser, RedocNormalizedOptions } from '../../ser
 import styled from '../../styled-components';
 import { OpenAPIMediaType } from '../../types';
 import { DropdownOrLabel } from '../DropdownOrLabel/DropdownOrLabel';
-import { MediaTypeSamples } from '../PayloadSamples/MediaTypeSamples';
-import { InvertedSimpleDropdown } from '../PayloadSamples/styled.elements';
+import { RequestMediaTypeSamples } from '../PayloadRequestSamples/RequestMediaTypeSamples';
+import { InvertedSimpleDropdown } from '../PayloadRequestSamples/styled.elements';
 import { Schema } from '../Schema';
 
 export interface ObjectDescriptionProps {
@@ -68,7 +68,7 @@ export class SchemaDefinition extends React.PureComponent<ObjectDescriptionProps
           {showExample && (
             <DarkRightPanel>
               <MediaSamplesWrap>
-                <MediaTypeSamples
+                <RequestMediaTypeSamples
                   renderDropdown={this.renderDropdown}
                   mediaType={this.mediaModel}
                 />

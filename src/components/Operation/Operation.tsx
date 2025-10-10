@@ -6,18 +6,20 @@ import { ShareLink } from '../../common-elements/linkify';
 import { OperationModel } from '../../services/models';
 import styled from '../../styled-components';
 import { CallbacksList } from '../Callbacks';
-import { CallbackSamples } from '../CallbackSamples/CallbackSamples';
+// import { CallbackSamples } from '../CallbackSamples/CallbackSamples';
 import { Endpoint } from '../Endpoint/Endpoint';
 import { ExternalDocumentation } from '../ExternalDocumentation/ExternalDocumentation';
 import { Extensions } from '../Fields/Extensions';
 import { Markdown } from '../Markdown/Markdown';
 import { OptionsContext } from '../OptionsProvider';
 import { Parameters } from '../Parameters/Parameters';
-import { RequestSamples } from '../RequestSamples/RequestSamples';
+// import { RequestSamples } from '../RequestSamples/RequestSamples';
 import { ResponsesList } from '../Responses/ResponsesList';
-import { ResponseSamples } from '../ResponseSamples/ResponseSamples';
+// import { ResponseSamples } from '../ResponseSamples/ResponseSamples';
 import { SecurityRequirements } from '../SecurityRequirement/SecurityRequirement';
 import { SECTION_ATTR } from '../../services';
+import { TryItPanel } from '../LiveResponses/TryItPanel';
+import { ResponseSamples } from '../..';
 
 const Description = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing.unit * 6}px;
@@ -41,6 +43,8 @@ export const Operation = observer(({ operation }: OperationProps): JSX.Element =
   const { showWebhookVerb } = React.useContext(OptionsContext);
   const badgesBefore = badges.filter(({ position }) => position === 'before');
   const badgesAfter = badges.filter(({ position }) => position === 'after');
+
+  const updateStateLiveResponse = React.useCallback(() => undefined, []);
 
   return (
     <OptionsContext.Consumer>
@@ -84,9 +88,8 @@ export const Operation = observer(({ operation }: OperationProps): JSX.Element =
           </MiddlePanel>
           <DarkRightPanel>
             {!options.pathInMiddlePanel && !isWebhook && <Endpoint operation={operation} />}
-            <RequestSamples operation={operation} />
+            <TryItPanel operation={operation} updateStateLiveResponse={updateStateLiveResponse} />
             <ResponseSamples operation={operation} />
-            <CallbackSamples callbacks={operation.callbacks} />
           </DarkRightPanel>
         </Row>
       )}

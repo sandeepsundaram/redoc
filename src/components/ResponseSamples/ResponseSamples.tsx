@@ -4,7 +4,7 @@ import * as React from 'react';
 import { OperationModel } from '../../services/models';
 
 import { RightPanelHeader, Tab, TabList, TabPanel, Tabs } from '../../common-elements';
-import { PayloadSamples } from '../PayloadSamples/PayloadSamples';
+import { RequestPayloadSamples } from '../PayloadRequestSamples/RequestPayloadSamples';
 import { l } from '../../services/Labels';
 
 export interface ResponseSamplesProps {
@@ -37,7 +37,7 @@ export class ResponseSamples extends React.Component<ResponseSamplesProps> {
             {responses.map(response => (
               <TabPanel key={response.code}>
                 <div>
-                  <PayloadSamples content={response.content!} />
+                  <RequestPayloadSamples content={response.content!} sampletype="response" />
                 </div>
               </TabPanel>
             ))}

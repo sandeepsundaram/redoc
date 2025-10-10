@@ -1,21 +1,20 @@
 import * as React from 'react';
-import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from '../../styled-components';
 
 import { SampleControls } from '../../common-elements';
 import { CopyButtonWrapper } from '../../common-elements/CopyButtonWrapper';
 import { EditableCode } from '../../common-elements/EditableCode';
 import { PrismDiv } from '../../common-elements/PrismDiv';
-import { jsonToHTML } from '../../utils/jsonToHtml';
-import { OptionsContext } from '../OptionsProvider';
-import { jsonStyles, ErrorDiv } from './style';
+import { XmlFormatter } from './XmlFormatter';
+
 import { observer } from 'mobx-react';
 import { OperationModel } from '../../services';
 
 import AceEditor from 'react-ace';
 
 // eslint-disable-next-line import/no-extraneous-dependencies, import/no-internal-modules
-import 'ace-builds/src-noconflict/mode-json';
+import 'ace-builds/src-noconflict/mode-xml';
 // eslint-disable-next-line import/no-extraneous-dependencies, import/no-internal-modules
 import 'ace-builds/src-noconflict/theme-chaos';
 // eslint-disable-next-line import/no-extraneous-dependencies, import/no-internal-modules
@@ -23,7 +22,7 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 
 import customStore from '../../services/CustomStore';
 
-export interface JsonProps {
+export interface XmlViewerProps {
   data: any;
   className?: string;
   operation?: OperationModel;
@@ -49,110 +48,29 @@ const isJsonString = (str: string) => {
   return true;
 };
 
-const serializeData = (value: any): string => {
-  if (value === undefined || value === null) {
-    return JSON.stringify({}, null, 2);
-  }
-  if (typeof value === 'string' && value.trim() !== '') {
-    if (isJsonString(value)) {
-      return value;
-    }
-    return JSON.stringify(value);
-  }
-  try {
-    return JSON.stringify(value, null, 2);
-  } catch (e) {
-    return JSON.stringify({}, null, 2);
-  }
-};
-
-const JsonViewerComponent: React.FC<JsonProps> = ({
+const XmlViewerComponent: React.FC<XmlViewerProps> = ({
   data: propData,
   className,
   operation,
   sampletype,
 }) => {
-  const options = useContext(OptionsContext);
   const [editMode, setEditMode] = useState(false);
   const [showHeaders, setShowHeaders] = useState(false);
-  const [data, setData] = useState<string>(serializeData(propData));
+  const [data, setData] = useState<string>(propData ?? '');
   const [headers, setHeaders] = useState<string>(JSON.stringify({}, null, 2));
   const [error, setError] = useState<string>('');
-  const nodeRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    setData(serializeData(propData));
+    setData(propData ?? '');
   }, [propData]);
 
   useEffect(() => {
-    if (sampletype === 'request' && !operation) {
-      console.warn('JsonViewer: request sample rendered without an operation. Editing disabled.');
+    if (operation && sampletype === 'request') {
+      customStore.addRequestSample(operation.httpVerb, operation.path, propData ?? '');
     }
-  }, [operation, sampletype]);
+  }, [operation, propData, sampletype]);
 
-  const collapseElement = useCallback((target: HTMLElement) => {
-    if (!target || target.className !== 'collapser') {
-      return;
-    }
-    const collapsed = target.parentElement?.getElementsByClassName('collapsible')[0];
-    if (!collapsed || !collapsed.parentElement) {
-      return;
-    }
-    if (collapsed.parentElement.classList.contains('collapsed')) {
-      collapsed.parentElement.classList.remove('collapsed');
-      target.setAttribute('aria-label', 'collapse');
-    } else {
-      collapsed.parentElement.classList.add('collapsed');
-      target.setAttribute('aria-label', 'expand');
-    }
-  }, []);
-
-  useEffect(() => {
-    const node = nodeRef.current;
-    if (!node) {
-      return;
-    }
-    const clickListener = (event: MouseEvent) => collapseElement(event.target as HTMLElement);
-    const focusListener = (event: KeyboardEvent) => {
-      if (event.key === 'Enter') {
-        collapseElement(event.target as HTMLElement);
-      }
-    };
-    node.addEventListener('click', clickListener);
-    node.addEventListener('focus', focusListener);
-    return () => {
-      node.removeEventListener('click', clickListener);
-      node.removeEventListener('focus', focusListener);
-    };
-  }, [collapseElement]);
-
-  const expandAll = useCallback(() => {
-    const node = nodeRef.current;
-    if (!node) {
-      return;
-    }
-    const elements = node.getElementsByClassName('collapsible');
-    for (const collapsed of Array.prototype.slice.call(elements)) {
-      const parentNode = collapsed.parentNode as Element;
-      parentNode.classList.remove('collapsed');
-      parentNode.querySelector('.collapser')?.setAttribute('aria-label', 'collapse');
-    }
-  }, []);
-
-  const collapseAll = useCallback(() => {
-    const node = nodeRef.current;
-    if (!node) {
-      return;
-    }
-    const elements = node.getElementsByClassName('collapsible');
-    const elementsArr = Array.prototype.slice.call(elements, 1);
-
-    for (const expanded of elementsArr) {
-      const parentNode = expanded.parentNode as Element;
-      parentNode.classList.add('collapsed');
-      parentNode.querySelector('.collapser')?.setAttribute('aria-label', 'expand');
-    }
-  }, []);
+  const verifyXml = useCallback((xml: string) => xml, []);
 
   const handleHeaderChange = useCallback(
     (value: string) => {
@@ -181,39 +99,41 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
 
   const handlePayloadChange = useCallback(
     (value: string) => {
-      let newValue = value;
-      if (newValue === null || newValue === undefined || newValue === '') {
-        newValue = JSON.stringify({}, null, 2);
+      if (value === null || value === undefined || value === '') {
+        setData('');
+      } else {
+        const verified = verifyXml(value);
+        if (verified) {
+          setData(verified);
+        } else {
+          return;
+        }
       }
-      setData(newValue);
       if (!showHeaders && editMode && operation && sampletype === 'request') {
         try {
-          const payloadObj = JSON.parse(newValue);
-          if (typeof payloadObj === 'object') {
-            customStore.addRequestSample(
-              operation.httpVerb,
-              operation.path,
-              JSON.stringify(payloadObj),
-            );
-          }
+          let payload = (value ?? '').replace(/(\r\n|\n|\r)/gm, '');
+          payload = payload.replace(/^\s+|\s+$/g, '');
+          payload = payload.replace(/>\s*/g, '>');
+          payload = payload.replace(/\s*</g, '<');
+          customStore.addRequestSample(operation.httpVerb, operation.path, payload);
         } catch (e) {
-          /* ignore parse errors while typing */
+          /* ignore formatting errors while typing */
         }
       }
     },
-    [editMode, operation, sampletype, showHeaders],
+    [editMode, operation, sampletype, showHeaders, verifyXml],
   );
 
   const showHeaderEditor = useCallback(() => {
     if (!showHeaders) {
-      if (!isJsonString(data) || typeof JSON.parse(data) !== 'object') {
+      if (!verifyXml(data)) {
         setError('Invalid Payload Format');
         return false;
       }
       setShowHeaders(true);
       setError('');
     }
-  }, [data, showHeaders]);
+  }, [data, showHeaders, verifyXml]);
 
   const showPayloadEditor = useCallback(() => {
     if (showHeaders) {
@@ -227,7 +147,7 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
   }, [headers, showHeaders]);
 
   const prettyPrint = useCallback(() => {
-    if (!isJsonString(data) || typeof JSON.parse(data) !== 'object') {
+    if (!verifyXml(data)) {
       setError('Invalid Payload Format');
       return false;
     }
@@ -238,16 +158,9 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
     setEditMode(false);
     setShowHeaders(false);
     setError('');
-  }, [data, headers]);
+  }, [data, headers, verifyXml]);
 
-  const html = useMemo(() => {
-    const expandLevel = options?.jsonSamplesExpandLevel ?? 0;
-    try {
-      return jsonToHTML(JSON.parse(data), expandLevel);
-    } catch (e) {
-      return jsonToHTML({}, expandLevel);
-    }
-  }, [data, options?.jsonSamplesExpandLevel]);
+  const formattedPreview = useMemo(() => XmlFormatter(data, '    '), [data]);
 
   const renderHeaderEditor = useCallback(
     () => (
@@ -287,11 +200,11 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
           <button onClick={prettyPrint}> Pretty Print </button>
         </SampleControls>
         <AceEditor
-          mode="json"
+          mode="xml"
           theme="chaos"
           onChange={handlePayloadChange}
           editorProps={{ $blockScrolling: true }}
-          value={data}
+          value={XmlFormatter(data, '  ')}
           highlightActiveLine={true}
           tabSize={2}
           width={'100%'}
@@ -314,27 +227,38 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
           <SampleControls>
             <button onClick={() => setEditMode(true)}> Edit </button>
             {renderCopyButton()}
-            <button onClick={expandAll}> Expand all </button>
-            <button onClick={collapseAll}> Collapse all </button>
+            <button
+              onClick={() => {
+                /* no-op for XML */
+              }}
+            >
+              {' '}
+              Expand all{' '}
+            </button>
+            <button
+              onClick={() => {
+                /* no-op for XML */
+              }}
+            >
+              {' '}
+              Collapse all{' '}
+            </button>
           </SampleControls>
         ) : null}
-        <PrismDiv
-          className={className}
-          ref={node => {
-            nodeRef.current = node;
-          }}
-          dangerouslySetInnerHTML={{
-            __html: html,
-          }}
-        />
+
+        <PrismDiv className={className}>
+          <pre>
+            <code>{formattedPreview}</code>
+          </pre>
+        </PrismDiv>
       </JsonViewerWrap>
     ),
-    [className, collapseAll, expandAll, html, sampletype],
+    [className, formattedPreview, sampletype],
   );
 
   return (
     <>
-      {editMode && error !== '' && <ErrorDiv>{error}</ErrorDiv>}
+      {editMode && error !== '' && <span>{error}</span>}
       {!editMode ? (
         <CopyButtonWrapper data={data}>{renderReadOnly}</CopyButtonWrapper>
       ) : (
@@ -346,6 +270,4 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
   );
 };
 
-export const JsonViewer = observer(styled(JsonViewerComponent)`
-  ${jsonStyles};
-`);
+export const XmlViewer = observer(XmlViewerComponent);

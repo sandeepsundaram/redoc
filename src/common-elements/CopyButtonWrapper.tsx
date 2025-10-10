@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Tooltip } from '../common-elements/Tooltip';
+import { Tooltip } from './Tooltip';
 
 import { ClipboardService } from '../services/ClipboardService';
 
@@ -14,6 +14,10 @@ export const CopyButtonWrapper = (
   const [tooltipShown, setTooltipShown] = React.useState(false);
 
   const copy = () => {
+    if (props.data === undefined || props.data === null) {
+      console.warn('CopyButtonWrapper: copy requested without data.');
+      return;
+    }
     const content =
       typeof props.data === 'string' ? props.data : JSON.stringify(props.data, null, 2);
     ClipboardService.copyCustom(content);
@@ -40,5 +44,6 @@ export const CopyButtonWrapper = (
       setTooltipShown(false);
     }, 1500);
   };
+
   return props.children({ renderCopyButton: renderCopyButton }) as JSX.Element;
 };
