@@ -255,7 +255,7 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
         <SampleControls>
           <button onClick={showHeaderEditor}> Headers </button>
           <button onClick={showPayloadEditor}> Payload </button>
-          <button onClick={prettyPrint}> Pretty Print </button>
+          <button onClick={prettyPrint}> Done </button>
         </SampleControls>
         <AceEditor
           mode="json"
@@ -284,7 +284,7 @@ const JsonViewerComponent: React.FC<JsonProps> = ({
         <SampleControls>
           <button onClick={showHeaderEditor}> Headers </button>
           <button onClick={showPayloadEditor}> Payload </button>
-          <button onClick={prettyPrint}> Pretty Print </button>
+          <button onClick={prettyPrint}> Done </button>
         </SampleControls>
         <AceEditor
           mode="json"

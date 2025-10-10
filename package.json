@@ -1,10 +1,10 @@
 {
-  "name": "redoc",
-  "version": "2.5.1",
-  "description": "ReDoc",
+  "name": "studio-docs",
+  "version": "1.0.0",
+  "description": "Studio Docs",
   "repository": {
     "type": "git",
-    "url": "git://github.com/Redocly/redoc"
+    "url": "git://github.com/Redocly/studio-docs"
   },
   "browserslist": [
     "defaults"
