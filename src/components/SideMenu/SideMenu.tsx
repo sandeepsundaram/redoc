@@ -30,7 +30,7 @@ export class SideMenu extends React.Component<{ menu: MenuStore; className?: str
         <RedocAttribution>
           <a target="_blank" rel="noopener noreferrer" href="https://redocly.com/redoc/">
             <RedoclyLogo />
-            API docs by Redocly
+            Studio Docs by DataEquity
           </a>
         </RedocAttribution>
       </PerfectScrollbarWrap>

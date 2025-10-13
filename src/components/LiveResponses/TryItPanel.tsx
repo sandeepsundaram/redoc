@@ -6,7 +6,6 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { OperationModel } from '../../services/models';
 
 import { RightPanelHeader, TabPanel, Tabs, Tab, TabList } from '../../common-elements';
-import { DropdownWrapper, DropdownLabel } from '../PayloadRequestSamples/styled.elements';
 import styled from 'styled-components';
 import { jsonToHTML } from '../../utils/jsonToHtml';
 import { jsonStyles } from '../JsonViewer/style';
@@ -96,6 +95,7 @@ const TryItPanelComponent: React.FC<TryItPanelProps> = ({ operation, updateState
   const [paramsState, setParamsState] = useState<ParamsState>({});
   const [liveResponse, setLiveResponse] = useState<any>(null);
   const [showLive, setShowLive] = useState(false);
+  const [liveStatus, setLiveStatus] = useState<number | null>(null);
 
   useEffect(() => {
     customStore.addMethodPath(operation.httpVerb, operation.path);
@@ -182,6 +182,26 @@ const TryItPanelComponent: React.FC<TryItPanelProps> = ({ operation, updateState
     [],
   );
 
+  const parseResponseBody = useCallback(async (resp: Response) => {
+    try {
+      return await resp.clone().json();
+    } catch {
+      try {
+        const text = await resp.clone().text();
+        if (!text) {
+          return { message: '' };
+        }
+        try {
+          return JSON.parse(text);
+        } catch {
+          return { message: text };
+        }
+      } catch {
+        return { message: 'Unable to read response body.' };
+      }
+    }
+  }, []);
+
   const getResponse = useCallback(() => {
     const servers = operation.servers[0].url;
     let path = operation.path;
@@ -220,6 +240,8 @@ const TryItPanelComponent: React.FC<TryItPanelProps> = ({ operation, updateState
     }
     const livePath = `${servers}${path}`;
     const method = operation.httpVerb;
+    const init: RequestInit = { method };
+
     if (method === 'post' || method === 'put') {
       let bodyContent: any;
       if (requestData.mimeType === 'application/json') {
@@ -242,72 +264,37 @@ const TryItPanelComponent: React.FC<TryItPanelProps> = ({ operation, updateState
       } else {
         bodyContent = requestData.payload;
       }
-      try {
-        fetch(livePath, {
-          method: method,
-          headers: header,
-          body: bodyContent,
-          redirect: 'follow',
-        })
-          .then(resp => resp.json())
-          .then(res => {
-            setLiveResponse(res);
-            setShowLive(true);
-            updateStateLiveResponse(true);
-          })
-          .catch(err => {
-            let error: any = err;
-            if (err.message === 'Failed to fetch') {
-              error = {
-                name: '',
-                message:
-                  '**Request failed.**  \n**Check for:** \n  - CORS restrictions \n  - Network connectivity issues \n  - Request URL using `http` or `https` for CORS calls.',
-              };
-            }
-            setLiveResponse(error);
-            setShowLive(true);
-            updateStateLiveResponse(true);
-          });
-        setShowLive(true);
-        updateStateLiveResponse(true);
-      } catch (e) {
-        const error: any = { name: '', message: 'Something went wrong!!' };
-        setLiveResponse(error);
-        setShowLive(true);
-        updateStateLiveResponse(true);
-      }
-    } else {
-      try {
-        fetch(livePath, { method: method })
-          .then(resp => resp.json())
-          .then(final => {
-            setLiveResponse(final);
-            setShowLive(true);
-            updateStateLiveResponse(true);
-          })
-          .catch(err => {
-            let error: any = err;
-            if (err.message === 'Failed to fetch') {
-              error = {
-                name: '',
-                message:
-                  '**Request failed.**  \n**Check for:** \n  - CORS restrictions \n  - Network connectivity issues \n  - Request URL using `http` or `https` for CORS calls.',
-              };
-            }
-            setLiveResponse(error);
-            setShowLive(true);
-            updateStateLiveResponse(true);
-          });
-        setShowLive(true);
-        updateStateLiveResponse(true);
-      } catch (e) {
-        const error: any = { name: '', message: 'Something went wrong!!' };
-        setLiveResponse(error);
-        setShowLive(true);
-        updateStateLiveResponse(true);
-      }
+      init.headers = header;
+      init.body = bodyContent;
+      init.redirect = 'follow';
     }
-  }, [operation, paramsState, updateStateLiveResponse]);
+
+    setLiveStatus(null);
+    setLiveResponse(null);
+
+    fetch(livePath, init)
+      .then(async resp => {
+        setLiveStatus(resp.status);
+        const body = await parseResponseBody(resp);
+        setLiveResponse(body);
+        setShowLive(true);
+        updateStateLiveResponse(true);
+      })
+      .catch(err => {
+        let error: any = err;
+        if (err.message === 'Failed to fetch') {
+          error = {
+            name: '',
+            message:
+              '**Request failed.**  \n**Check for:** \n  - CORS restrictions \n  - Network connectivity issues \n  - Request URL using `http` or `https` for CORS calls.',
+          };
+        }
+        setLiveStatus(null);
+        setLiveResponse(error);
+        setShowLive(true);
+        updateStateLiveResponse(true);
+      });
+  }, [operation, paramsState, updateStateLiveResponse, parseResponseBody]);
 
   const samples = operation.codeSamples;
   const hasSamples = samples.length > 0;
@@ -315,12 +302,26 @@ const TryItPanelComponent: React.FC<TryItPanelProps> = ({ operation, updateState
   const shouldShowTabs = (verb === 'post' || verb === 'put' || verb === 'patch') && hasSamples;
   const hideTabList = samples.length === 1;
 
-  const responseHtml = useMemo(() => {
+  const normalizedResponse = useMemo(() => {
     if (liveResponse === null) {
+      return null;
+    }
+    if (typeof liveResponse === 'string') {
+      try {
+        return JSON.parse(liveResponse);
+      } catch {
+        return { message: liveResponse };
+      }
+    }
+    return liveResponse;
+  }, [liveResponse]);
+
+  const responseHtml = useMemo(() => {
+    if (!normalizedResponse) {
       return '';
     }
-    return jsonToHTML(liveResponse, 4);
-  }, [liveResponse]);
+    return jsonToHTML(normalizedResponse, 4);
+  }, [normalizedResponse]);
 
   return (
     <div>
@@ -383,22 +384,16 @@ const TryItPanelComponent: React.FC<TryItPanelProps> = ({ operation, updateState
             </Tabs>
           </div>
         ) : null}
-        <TryoutBtn onClick={getResponse}> Try Out </TryoutBtn>
+        <TryoutBtn onClick={getResponse}>Run API</TryoutBtn>
       </div>
       {showLive && liveResponse && (
         <div>
-          <RightPanelHeader> API Response </RightPanelHeader>
+          <RightPanelHeader>API Response</RightPanelHeader>
           <Tabs defaultIndex={0}>
             <TabList>
-              <Tab>Payload</Tab>
+              <Tab>{liveStatus !== null ? `Status ${liveStatus}` : 'Response'}</Tab>
             </TabList>
             <TabPanel key="payload">
-              <div style={{ paddingBottom: '0' }}>
-                <DropdownWrapper>
-                  <DropdownLabel>Content type</DropdownLabel>
-                  <ResponseValueType>application/json</ResponseValueType>
-                </DropdownWrapper>
-              </div>
               <StyledPrismDiv
                 dangerouslySetInnerHTML={{
                   __html: responseHtml,
@@ -416,36 +411,28 @@ export const TryItPanel = observer(TryItPanelComponent);
 
 export const TryoutBtn = styled.button`
   min-width: 100px;
-  color: rgb(51, 51, 51);
-  background: rgb(255, 255, 255);
-  padding: 8px 10px;
+  color: #ffffff;
+  background: #16a34a;
+  padding: 10px 16px;
   display: inline-block;
   cursor: pointer;
   text-align: center;
   outline: none;
   margin: 20px 5px 0;
-  border: 1px solid rgb(7, 9, 11);
+  border: 1px solid #15803d;
   border-radius: 5px;
   font-size: 0.9em;
   font-weight: bold;
+  transition: background 0.2s ease, border-color 0.2s ease;
 
   &:focus {
     outline: auto;
   }
-`;
 
-export const ResponseValueType = styled.div`
-  position: relative;
-  font-family: ${props => props.theme.typography.headings.fontFamily};
-  font-size: 0.929em;
-  padding: 0.9em 1.6em 0.9em 0.9em;
-  min-width: 100px;
-  width: auto;
-  color: #ffffff;
-  background-color: rgba(38, 50, 56, 0.4);
-  outline: none;
-  line-height: 1.5em;
-  margin: 0 0 10px 0;
+  &:hover {
+    background: #15803d;
+    border-color: #166534;
+  }
 `;
 
 export const StyledPrismDiv = styled(PrismDiv)`

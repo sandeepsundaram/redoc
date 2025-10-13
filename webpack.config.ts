@@ -28,7 +28,7 @@ try {
   console.error('Skipping REDOC_REVISION');
 }
 
-const BANNER = `Studio docs - OpenAPI/Swagger-generated API Reference Documentation
+const BANNER = `ReDoc - OpenAPI/Swagger-generated API Reference Documentation
 -------------------------------------------------------------
   Version: ${VERSION}
   Repo: https://github.com/Redocly/redoc`;
@@ -37,10 +37,10 @@ export default (env: { standalone?: boolean; browser?: boolean } = {}) => ({
   entry: env.standalone ? ['./src/polyfills.ts', './src/standalone.tsx'] : './src/index.ts',
   output: {
     filename: env.standalone
-      ? 'studiodocs.standalone.js'
+      ? 'redoc.standalone.js'
       : env.browser
-      ? 'studiodocs.browser.lib.js'
-      : 'studiodocs.lib.js',
+      ? 'redoc.browser.lib.js'
+      : 'redoc.lib.js',
     path: path.join(__dirname, '/bundles'),
     library: 'Redoc',
     libraryTarget: 'umd',

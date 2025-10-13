@@ -1,18 +1,24 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import * as React from 'react';
 
-export default function RedoclyLogo(): JSX.Element | null {
-  const [isDisplay, setDisplay] = useState(false);
+const RedoclyLogoComponent = (): JSX.Element | null => {
+  const [shouldRender, setShouldRender] = useState(false);
 
   useEffect(() => {
-    setDisplay(true);
+    setShouldRender(true);
   }, []);
 
-  return isDisplay ? (
+  if (!shouldRender) {
+    return null;
+  }
+
+  return (
     <img
-      alt={'redocly logo'}
-      onError={() => setDisplay(false)}
-      src={'https://cdn.redoc.ly/redoc/logo-mini.svg'}
+      alt="dataequity logo"
+      onError={() => setShouldRender(false)}
+      src="https://dataequity.io/favicon.ico"
     />
-  ) : null;
-}
+  );
+};
+
+export default memo(RedoclyLogoComponent);

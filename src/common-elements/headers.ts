@@ -37,6 +37,7 @@ export const H3 = styled.h2`
 
 export const RightPanelHeader = styled.h3`
   color: ${({ theme }) => theme.rightPanel.textColor};
+  margin: 4px 0 4px;
 
   ${extensionsHook('RightPanelHeader')};
 `;
